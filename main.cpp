@@ -78,6 +78,24 @@ public:
     }
 };
 
+class CpuPaddle : public Paddle{
+public:
+    void Update(int ball_y){
+        if (y + height / 2 > ball_y){
+            y = y - speed;
+        }
+        if (y + height / 2 <= ball_y){
+            y = y + speed;
+        }
+        LimitMovement();
+    }
+};
+
+Ball ball;
+Paddle player;
+CpuPaddle cpu;
+
+
 int main(){
     std::cout << "Starting game...." << std::endl;
     const int screen_width = 1280;
@@ -138,3 +156,5 @@ int main(){
     CloseWindow();
     return 0;
 }
+
+// g++ main.cpp -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o main && ./main
