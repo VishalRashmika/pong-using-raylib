@@ -101,6 +101,10 @@ int main(){
     const int screen_width = 1280;
     const int screen_height = 800;
     InitWindow(screen_width,screen_height,"Pong");
+    InitAudioDevice();
+    Music music;
+    music = LoadMusicStream("Sounds/bg-music.ogg");
+    PlayMusicStream(music);
     SetTargetFPS(60);
 
     ball.radius = 20;
@@ -123,6 +127,7 @@ int main(){
 
     while (WindowShouldClose() == false)
     {
+        UpdateMusicStream(music);
         BeginDrawing();
         
         // updating
@@ -153,8 +158,14 @@ int main(){
         EndDrawing();
     }
 
+    UnloadMusicStream(music);
     CloseWindow();
+    CloseAudioDevice();
     return 0;
 }
 
 // g++ main.cpp -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -o main && ./main
+
+/*
+emcc -o ./export/pong.html ./src/main.cpp -Wall -std=c++14 -D_DEFAULT_SOURCE -Wno-missing-braces -Wunused-result -Os -I. -I C:/raylib/raylib/src -I C:/raylib/raylib/src/external -L. -L C:/raylib/raylib/src -s USE_GLFW=3 -s ASYNCIFY -s TOTAL_MEMORY=67108864 -s FORCE_FILESYSTEM=1 --shell-file C:/raylib/raylib/src/shell.html C:/raylib/raylib/src/web/libraylib.a -DPLATFORM_WEB -s 'EXPORTED_FUNCTIONS=["_free","_malloc","_main"]'-s EXPORTED_RUNTIME_METHODS=ccall
+*/
